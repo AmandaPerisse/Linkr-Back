@@ -48,3 +48,41 @@ export async function searchUser(req, res) {
     return res.sendStatus(500);
   }
 }
+
+export async function getAllUsers(req, res) {
+
+  try {
+    let result = await connection.query(
+      `
+      SELECT * FROM users
+      `
+    );
+
+    if (result.rowsCount === 0) return res.send([]);  
+    res.send(result.rows);
+  }
+  catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+}
+
+export async function getUserId(req, res) {
+
+  const id = req.params.id;
+
+  try {
+    let result = await connection.query(
+      `
+      SELECT * FROM users WHERE id = $1
+      `
+    , [id]);
+
+    if (result.rowsCount === 0) return res.send([]);  
+    res.send(result.rows);
+  }
+  catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+}
