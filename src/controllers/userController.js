@@ -23,3 +23,28 @@ export async function postUser(req, res) {
     return res.sendStatus(500);
   }
 }
+
+export async function searchUser(req, res) {
+  
+  const { search } = req.body;
+  try {
+    console.log(search);
+    let result = await connection.query(
+      `
+      SELECT * FROM users WHERE name ILIKE $1
+      `,
+      [`${search}%`] 
+    );
+
+    console.log('#1');
+    console.log(result.rows)
+
+    if (result.rowsCount === 0) return res.send([]);  
+    res.send(result.rows);
+    
+  }
+  catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+}
