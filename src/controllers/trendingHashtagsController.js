@@ -8,7 +8,6 @@ export async function getTrendingHashtags(req, res) {
         res.send(trendingHashtags);
 
     } catch (error) {
-        console.error(error);
         res.status(500).send('getTrendingHashtags error');
     }
 }
@@ -37,7 +36,6 @@ export async function getTrendingHashtagPosts(req, res) {
         res.send(timeline);
 
     } catch (error) {
-        console.error(error);
         res.status(500).send('getTrendingHashtagPosts error');
     }
 }
