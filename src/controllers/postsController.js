@@ -62,7 +62,14 @@ export async function getTimeline(req, res) {
                 
         followers = followers.rows;
 
-        const rawTimeline = await getLastPosts(userId, 20);
+        let rawTimeline = await getLastPosts(userId, 20); //user posts
+
+        for (let i = 0; i < followers.length; i++) {
+            const friendPosts = await getLastPosts(followers[i].friendId, 20)
+            const feedUpdated = rawTimeline.concat(friendPosts);
+            rawTimeline = feedUpdated;
+        }
+
         const postIdsUserLiked = await getPostIdsUserLiked(userId);
 
         for (let i = 0; i < rawTimeline.length; i++) {
@@ -75,7 +82,9 @@ export async function getTimeline(req, res) {
             timeline.push(post);
         }
 
-        res.send(timeline);
+        const timelineSorted = timeline.sort((a, b) => { return b.id - a.id; });
+
+        res.send(timelineSorted);
 
     } catch (error) {
         console.error(error);
